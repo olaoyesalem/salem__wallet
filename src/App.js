@@ -4,7 +4,7 @@ import AccountCreate from './scenes/Accounts/AccountCreate';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App n-3" >
      <AccountCreate/>
     </div>
   );
