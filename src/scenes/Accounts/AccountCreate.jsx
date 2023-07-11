@@ -1,5 +1,6 @@
 import React from 'react';
 import { generateKeys } from '../../utils/AccountUtils';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class AccountCreate extends React.Component {
   constructor(props) {
@@ -31,6 +32,10 @@ class AccountCreate extends React.Component {
     }
   };
 
+  handleRecoverSubmit = () => {
+    this.generateAccount();
+  };
+
   generateAccount = () => {
     const { seedPhrase } = this.state;
     const keys = generateKeys(seedPhrase);
@@ -41,18 +46,26 @@ class AccountCreate extends React.Component {
     const { showInput, seedPhrase } = this.state;
 
     return (
-      <div>
-        <button onClick={this.handleClick}>Create Account</button>
-        <button onClick={this.handleRecoverClick}>Recover Account</button>
+      <div className="container mt-4">
+        <button className="btn btn-success mr-2" onClick={this.handleClick}>
+          Create Account
+        </button>
+        <button className="btn btn-secondary" onClick={this.handleRecoverClick}>
+          Recover Account
+        </button>
         {showInput && (
-          <div>
+          <div className="mt-3">
             <input
               type="text"
+              className="form-control"
               value={seedPhrase}
               onChange={this.handleInputChange}
               onKeyPress={this.handleInputEnter}
               placeholder="Enter Seed Phrase or Private Key"
             />
+            <button className="btn btn-success mt-2" onClick={this.handleRecoverSubmit}>
+              Submit
+            </button>
           </div>
         )}
       </div>
