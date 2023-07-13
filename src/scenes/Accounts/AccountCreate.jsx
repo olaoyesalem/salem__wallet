@@ -2,7 +2,8 @@ import React from 'react';
 import { generateKeys } from '../../utils/AccountUtils';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AccountCreate.css'; // Import custom CSS styles
-
+import {Account} from '../../model/Account'
+//import AccountDetail from '../Accounts/AccountDetail';
 class AccountCreate extends React.Component {
   constructor(props) {
     super(props);
@@ -74,9 +75,11 @@ class AccountCreate extends React.Component {
             </div>
           )}
         </div>
-      </div>
+
+          </div>
     );
   }
 }
+
 
 export default AccountCreate;
