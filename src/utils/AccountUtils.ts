@@ -1,10 +1,10 @@
-import { Wallet } from 'ethers';
+import { Wallet,HDNodeWallet } from 'ethers';
 import { Account } from '../models/Account';
 
 
 export function generateAccount(seedPhrase: string = "", index: number = 0): 
 { account: Account, seedPhrase: string } {
-  let wallet: Wallet;
+  let wallet: Wallet | HDNodeWallet;
 
   // If the seed phrase is not provided, generate a random mnemonic using a CSPRNG
   if (seedPhrase === "") {
@@ -13,10 +13,13 @@ export function generateAccount(seedPhrase: string = "", index: number = 0):
   }
   
   // If the seed phrase does not contain spaces, it is likely a mnemonic
-  
-  wallet = (seedPhrase.includes(" "))
-  ? new Wallet(Wallet.fromPhrase(seedPhrase, `m/44'/60'/0'/0/${index}`).privateKey)
-  : new Wallet(seedPhrase);
+ 
+
+  if (seedPhrase.includes(" ")) {
+    wallet = Wallet.fromPhrase(seedPhrase);
+  } else {
+    wallet = new Wallet(seedPhrase);
+  }
 
   
 
