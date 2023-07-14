@@ -23,9 +23,9 @@ const AccountDetail: React.FC<AccountDetailProps> = ({account}) => {
 
   useEffect(() => {
     const fetchData = async () => {
-        const provider = new ethers.providers.JsonRpcProvider(goerli.rpcUrl);
+        const provider = new ethers.JsonRpcProvider(goerli.rpcUrl);
         let accountBalance = await provider.getBalance(account.address);
-        setBalance((String(toFixedIfNecessary(ethers.utils.formatEther(accountBalance)))));
+        setBalance((String(toFixedIfNecessary(ethers.formatEther(accountBalance)))));
     }
     fetchData();
 }, [account.address])
@@ -48,16 +48,42 @@ const AccountDetail: React.FC<AccountDetailProps> = ({account}) => {
     try {
       const { receipt } = await sendToken(amount, account.address, destinationAddress, account.privateKey);
 
-      if (receipt.status === 1) {
+      // if (receipt.status === 1) {
+      //   // Set the network response status to "complete" and the message to the transaction hash
+      //   setNetworkResponse({
+      //     status: 'complete',
+      //     message: <p>Transfer complete! <a href={`${goerli.blockExplorerUrl}/tx/${receipt.transactionHash}`} target="_blank" rel="noreferrer">
+      //       View transaction
+      //       </a></p>,
+      //   });
+      //   return receipt;
+      // } else {
+      //   // Transaction failed
+      //   console.log(`Failed to send ${receipt}`);
+      //   // Set the network response status to "error" and the message to the receipt
+      //   setNetworkResponse({
+      //     status: 'error',
+      //     message: JSON.stringify(receipt),
+      //   });
+      //   return { receipt };
+      // }
+      if (receipt?.status === 1) {
         // Set the network response status to "complete" and the message to the transaction hash
         setNetworkResponse({
           status: 'complete',
-          message: <p>Transfer complete! <a href={`${goerli.blockExplorerUrl}/tx/${receipt.transactionHash}`} target="_blank" rel="noreferrer">
-            View transaction
-            </a></p>,
+          message: (
+            <p>
+              Transfer complete!{' '}
+           //chnaged sth   <a href={`${goerli.blockExplorerUrl}/tx/${receipt}`} target="_blank" rel="noreferrer">
+                View transaction
+              </a>
+            </p>
+          ),
         });
+
+        
         return receipt;
-      } else {
+      } else if (receipt) {
         // Transaction failed
         console.log(`Failed to send ${receipt}`);
         // Set the network response status to "error" and the message to the receipt
@@ -66,7 +92,16 @@ const AccountDetail: React.FC<AccountDetailProps> = ({account}) => {
           message: JSON.stringify(receipt),
         });
         return { receipt };
+      } else {
+        // Handle case where receipt is null
+        // Set the network response status to "error" and the message to an error message
+        setNetworkResponse({
+          status: 'error',
+          message: 'Receipt is null',
+        });
+        return { receipt };
       }
+      
     } catch (error: any) {
       // An error occurred while sending the transaction
       console.error({ error });
@@ -89,22 +124,28 @@ const AccountDetail: React.FC<AccountDetailProps> = ({account}) => {
 
         <div className="form-group">
             <label>Destination Address:</label>
-            <input
-            className="form-control"
-            type="text"
-            value={destinationAddress}
-            onChange={handleDestinationAddressChange}
-            />
+            <label htmlFor="destinationAddress">Destination Address:</label>
+<input
+    id="destinationAddress"
+    className="form-control"
+    type="text"
+    value={destinationAddress}
+    onChange={handleDestinationAddressChange}
+/>
+
         </div>
 
         <div className="form-group">
             <label>Amount:</label>
             <input
-            className="form-control"
-            type="number"
-            value={amount}
-            onChange={handleAmountChange}
-            />
+    className="form-control"
+    type="number"
+    value={amount}
+    onChange={handleAmountChange}
+    title="Enter Amount"
+    placeholder="Enter Amount"
+/>
+
         </div>
 
         <button

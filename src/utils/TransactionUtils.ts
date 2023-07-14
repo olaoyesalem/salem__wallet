@@ -1,4 +1,4 @@
-import { ethers, Wallet, utils } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 import { CHAINS_CONFIG, goerli } from '../models/Chain';
 export async function sendToken(
   amount: number,
@@ -19,7 +19,7 @@ export async function sendToken(
   // Construct the transaction object
   const tx = {
     to,
-    value: ethers.utils.parseEther(amount.toString()),
+    value: ethers.parseEther(amount.toString())
   };
 
   // Sign the transaction with the sender's wallet
