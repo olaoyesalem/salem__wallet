@@ -81,7 +81,7 @@ const AccountDetail: React.FC<AccountDetailProps> = ({account}) => {
           ),
         });
 
-        
+
         return receipt;
       } else if (receipt) {
         // Transaction failed
